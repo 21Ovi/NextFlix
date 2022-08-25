@@ -14,7 +14,11 @@ export default function Home() {
 
       <h1>NextFlix</h1>
 
-      <Banner />
+      <Banner
+        title="Clifford the red dog"
+        subTitle="a very cute dog"
+        imgUrl="/static/clifford.webp"
+      />
       {/* 
       <NavBar />
 
