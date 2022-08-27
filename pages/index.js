@@ -8,9 +8,14 @@ import SectionCards from "../components/card/section-cards";
 
 import { getVideos } from "../lib/videos";
 
-export default function Home() {
+export async function getServerSideProps() {
   const disneyVideos = getVideos();
 
+  return { props: { disneyVideos } };
+}
+
+export default function Home({ disneyVideos }) {
+  console.log({ disneyVideos });
   return (
     <div className={styles.container}>
       <Head>
