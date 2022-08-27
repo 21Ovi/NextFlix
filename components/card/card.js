@@ -1,9 +1,13 @@
+import { useState } from "react";
+
 import Image from "next/image";
 
 import styles from "./card.module.css";
 
 const Card = (props) => {
-  const { imgUrl, size } = props;
+  const { imgUrl = "/static/clifforsd.webp", size = "medium" } = props;
+
+  const [imgSrc, setImgSrc] = useState(imgUrl);
 
   const classMap = {
     large: styles.lgItem,
@@ -11,15 +15,21 @@ const Card = (props) => {
     small: styles.smItem,
   };
 
+  const handleOnError = () => {
+    console.log("Hi Error");
+    setImgSrc("/static/clifford.webp");
+  };
+
   return (
     <div className={styles.container}>
       Card
       <div className={classMap[size]}>
         <Image
-          src={imgUrl}
+          src={imgSrc}
           alt="image"
           layout="fill"
           className={styles.cardImg}
+          onError={handleOnError}
         />
       </div>
     </div>
