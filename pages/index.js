@@ -23,8 +23,8 @@ export default function Home() {
       />
 
       <Card imgUrl="/static/clifford.webp" size="large" />
-      <Card imgUrl="/static/clifford.webp" size="medium" />
-      <Card size="small" />
+      <Card size="medium" />
+      <Card imgUrl="/static/clifford.webp" size="small" />
     </div>
   );
 }
