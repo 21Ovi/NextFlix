@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { Router, useRouter } from "next/router";
+
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,24 +9,29 @@ import Link from "next/link";
 import styles from "../styles/Login.module.css";
 
 const Login = () => {
+  const router = useRouter();
+
   const [userMsg, setUserMsg] = useState("");
   const [email, setEmail] = useState("");
 
   const handleOnChangeEmail = (e) => {
     setUserMsg("");
-    console.log("Event", e);
     const email = e.target.value;
     setEmail(email);
   };
 
   const handleLoginWithEmail = async (e) => {
     e.preventDefault();
-    console.log("hi button");
+
     if (email) {
-      // route to dashboard
+      if (email === "ovi@gmail.com") {
+        router.push("/");
+      } else {
+        // show user message
+        setUserMsg("Enter a valid Email address");
+      }
     } else {
-      // show user message
-      setUserMsg("Enter a valid Email address");
+      console.log("Something Went Wrong");
     }
   };
 
