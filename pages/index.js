@@ -8,8 +8,6 @@ import SectionCards from "../components/card/section-cards";
 
 import { getPopularVideos, getVideos } from "../lib/videos";
 
-import magic from "../lib/magic-client";
-
 export async function getServerSideProps() {
   const disneyVideos = await getVideos("disney trailer");
   const ProductivityVideos = await getVideos("Shade Zahrai");
@@ -28,7 +26,6 @@ export default function Home({
   TravelVideos,
   PopularVideos,
 }) {
-  console.log("Magic setup", magic);
   return (
     <div className={styles.container}>
       <Head>

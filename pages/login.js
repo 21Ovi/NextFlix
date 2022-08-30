@@ -6,6 +6,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 
+import magic from "../lib/magic-client";
+
 import styles from "../styles/Login.module.css";
 
 const Login = () => {
@@ -24,8 +26,17 @@ const Login = () => {
     e.preventDefault();
 
     if (email) {
-      if (email === "ovi@gmail.com") {
-        router.push("/");
+      if (email === "ansariovesh21@gmail.com") {
+        // router.push("/");
+        try {
+          const didToken = await magic.auth.loginWithMagicLink({
+            email,
+          });
+          console.log({ didToken });
+        } catch (error) {
+          // Handle errors if required!
+          console.error("Something went wrong logging in", error);
+        }
       } else {
         // show user message
         setUserMsg("Enter a valid Email address");
