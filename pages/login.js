@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 import Head from "next/head";
 import Image from "next/image";
@@ -16,6 +16,20 @@ const Login = () => {
   const [userMsg, setUserMsg] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const handleComplete = () => {
+      setIsLoading(false);
+    };
+
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangError", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangError", handleComplete);
+    };
+  }, [router]);
 
   const handleOnChangeEmail = (e) => {
     setUserMsg("");
@@ -36,7 +50,6 @@ const Login = () => {
           });
           console.log({ didToken });
           if (didToken) {
-            setIsLoading(false);
             router.push("/");
           }
         } catch (error) {
