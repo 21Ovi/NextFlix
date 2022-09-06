@@ -10,13 +10,14 @@ Modal.setAppElement("#__next");
 const Video = () => {
   const video = {
     title: " Hi Cute dog",
-    publishTitle: "1999-01-31",
-    description: "A big dog that is super cute, can he get any bigger",
+    publishTime: "1999-01-31",
+    description:
+      "A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger",
     channelTitle: "Paramount Pictures",
     viewCount: 10000,
   };
 
-  const { title, publishTitle, description, channelTitle, viewCount } = video;
+  const { title, publishTime, description, channelTitle, viewCount } = video;
 
   const router = useRouter();
   console.log({ router });
@@ -44,7 +45,7 @@ const Video = () => {
           <div className={styles.modalBody}>
             <div className={styles.modalBodyContent}>
               <div className={styles.col1}>
-                <p className={styles.publishTitle}>{publishTitle}</p>
+                <p className={styles.publishTime}>{publishTime}</p>
                 <p className={styles.title}>{title}</p>
                 <p className={styles.description}>{description}</p>
               </div>
