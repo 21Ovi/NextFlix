@@ -5,21 +5,27 @@ import styles from "../../styles/Video.module.css";
 
 import clsx from "classnames";
 
+import { getYoutubeVideoById } from "../../lib/videos";
+
 Modal.setAppElement("#__next");
 
 export async function getStaticProps() {
   // fetch from API
-  const video = {
-    title: " Hi Cute dog",
-    publishTime: "1999-01-31",
-    description: "",
-    channelTitle: "Paramount Pictures",
-    viewCount: 10000,
-  };
+  // const video = {
+  //   title: " Hi Cute dog",
+  //   publishTime: "1999-01-31",
+  //   description:
+  //     "Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures",
+  //   channelTitle: "Paramount Pictures",
+  //   viewCount: 10000,
+  // };
+
+  const videoId = "4zH5iYM4wJo";
+  const videoArray = await getYoutubeVideoById(videoId);
 
   return {
     props: {
-      video,
+      video: videoArray.length > 0 ? videoArray[0] : {},
     },
     revalidate: 10,
   };
@@ -36,10 +42,15 @@ export async function getStaticPaths() {
 }
 
 const Video = ({ video }) => {
-  const { title, publishTime, description, channelTitle, viewCount } = video;
+  const {
+    title,
+    publishTime,
+    description,
+    channelTitle,
+    statistics: { viewCount },
+  } = video;
 
   const router = useRouter();
-  console.log({ router });
   return (
     <div className={styles.container}>
       <Modal
