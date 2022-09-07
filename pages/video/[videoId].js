@@ -6,6 +6,7 @@ import styles from "../../styles/Video.module.css";
 import clsx from "classnames";
 
 import { getYoutubeVideoById } from "../../lib/videos";
+import NavBar from "../../components/nav/navbar";
 
 Modal.setAppElement("#__next");
 
@@ -53,6 +54,7 @@ const Video = ({ video }) => {
   const router = useRouter();
   return (
     <div className={styles.container}>
+      <NavBar />
       <Modal
         isOpen={true}
         contentLabel="Watch the Video"
