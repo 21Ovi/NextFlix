@@ -11,16 +11,6 @@ import NavBar from "../../components/nav/navbar";
 Modal.setAppElement("#__next");
 
 export async function getStaticProps(context) {
-  // fetch from API
-  // const video = {
-  //   title: " Hi Cute dog",
-  //   publishTime: "1999-01-31",
-  //   description:
-  //     "Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures Paramount Pictures",
-  //   channelTitle: "Paramount Pictures",
-  //   viewCount: 10000,
-  // };
-
   const videoId = context.params.videoId;
   const videoArray = await getYoutubeVideoById(videoId);
 
