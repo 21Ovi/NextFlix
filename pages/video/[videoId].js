@@ -5,24 +5,46 @@ import styles from "../../styles/Video.module.css";
 
 import clsx from "classnames";
 
+import { getYoutubeVideoById } from "../../lib/videos";
+import NavBar from "../../components/nav/navbar";
+
 Modal.setAppElement("#__next");
 
-const Video = () => {
-  const video = {
-    title: " Hi Cute dog",
-    publishTime: "1999-01-31",
-    description:
-      "A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger",
-    channelTitle: "Paramount Pictures",
-    viewCount: 10000,
-  };
+export async function getStaticProps(context) {
+  const videoId = context.params.videoId;
+  const videoArray = await getYoutubeVideoById(videoId);
 
-  const { title, publishTime, description, channelTitle, viewCount } = video;
+  return {
+    props: {
+      video: videoArray.length > 0 ? videoArray[0] : {},
+    },
+    revalidate: 10,
+  };
+}
+
+export async function getStaticPaths() {
+  const listOfVideos = ["mYfJxlgR2jw", "4zH5iYM4wJo", "KCPEHsAViiQ"];
+
+  const paths = listOfVideos.map((videoId) => ({
+    params: { videoId },
+  }));
+
+  return { paths, fallback: "blocking" };
+}
+
+const Video = ({ video }) => {
+  const {
+    title,
+    publishTime,
+    description,
+    channelTitle,
+    statistics: { viewCount } = { viewCount: 0 },
+  } = video;
 
   const router = useRouter();
-  console.log({ router });
   return (
     <div className={styles.container}>
+      <NavBar />
       <Modal
         isOpen={true}
         contentLabel="Watch the Video"
