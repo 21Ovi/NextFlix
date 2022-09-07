@@ -7,16 +7,35 @@ import clsx from "classnames";
 
 Modal.setAppElement("#__next");
 
-const Video = () => {
+export async function getStaticProps() {
+  // fetch from API
   const video = {
     title: " Hi Cute dog",
     publishTime: "1999-01-31",
-    description:
-      "A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger, A big dog that is super cute, can he get any bigger",
+    description: "",
     channelTitle: "Paramount Pictures",
     viewCount: 10000,
   };
 
+  return {
+    props: {
+      video,
+    },
+    revalidate: 10,
+  };
+}
+
+export async function getStaticPaths() {
+  const listOfVideos = ["mYfJxlgR2jw", "4zH5iYM4wJo", "KCPEHsAViiQ"];
+
+  const paths = listOfVideos.map((videoId) => ({
+    params: { videoId },
+  }));
+
+  return { paths, fallback: "blocking" };
+}
+
+const Video = ({ video }) => {
   const { title, publishTime, description, channelTitle, viewCount } = video;
 
   const router = useRouter();
