@@ -9,6 +9,7 @@ import NavBar from "../components/nav/navbar";
 import SectionCards from "../components/card/section-cards";
 
 import { getPopularVideos, getVideos } from "../lib/videos";
+import { queryGraphQL } from "../lib/db/hasura";
 
 export async function getServerSideProps() {
   const disneyVideos = await getVideos("disney trailer");
