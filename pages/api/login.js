@@ -1,17 +1,15 @@
 import { magicAdmin } from "../../lib/magic";
 import jwt from "jsonwebtoken";
+import { isNewUser } from "../../lib/db/hasura";
 
 export default async function login(req, res) {
   if (req.method === "POST") {
     try {
       const auth = req.headers.authorization;
       const didToken = auth ? auth.substr(7) : "";
-      console.log({ didToken });
 
       const metadata = await magicAdmin.users.getMetadataByToken(didToken);
-      console.log({ metadata });
-
-      //create jwt
+      res.send({ metadata });
 
       const token = jwt.sign(
         {
@@ -24,11 +22,14 @@ export default async function login(req, res) {
             "x-hasura-user-id": `${metadata.issuer}`,
           },
         },
-        "ThisIsASecret123321TokenSecret21"
+        process.env.JWT_SECRET
       );
       console.log({ token });
 
-      res.send({ done: true });
+      // CHECK IF USER EXISTS
+
+      const isNewUserQuery = await isNewUser(token, metadata.issuer);
+      res.send({ done: true, isNewUserQuery });
     } catch (error) {
       console.error("Something went wrong logging in", error);
       res.status(500).send({ done: false });
