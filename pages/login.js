@@ -1,33 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
-
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 
+import styles from "../styles/Login.module.css";
 import { magic } from "../lib/magic-client";
 
-import styles from "../styles/Login.module.css";
-
 const Login = () => {
-  const router = useRouter();
-
-  const [userMsg, setUserMsg] = useState("");
   const [email, setEmail] = useState("");
+  const [userMsg, setUserMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const handleComplete = () => {
       setIsLoading(false);
     };
-
     router.events.on("routeChangeComplete", handleComplete);
-    router.events.on("routeChangError", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
 
     return () => {
       router.events.off("routeChangeComplete", handleComplete);
-      router.events.off("routeChangError", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
     };
   }, [router]);
 
@@ -39,18 +36,32 @@ const Login = () => {
 
   const handleLoginWithEmail = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (email) {
-      if (email === "ansariovesh21@gmail.com") {
+      if (email) {
         //  log in a user by their email
         try {
-          setIsLoading(true);
           const didToken = await magic.auth.loginWithMagicLink({
             email,
           });
           console.log({ didToken });
           if (didToken) {
-            router.push("/");
+            const response = await fetch("/api/login", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${didToken}`,
+                "Content-Type": "application/json",
+              },
+            });
+
+            const loggedInResponse = await response.json();
+            if (loggedInResponse.done) {
+              router.push("/");
+            } else {
+              setIsLoading(false);
+              setUserMsg("Something went wrong logging you in");
+            }
           }
         } catch (error) {
           // Handle errors if required!
@@ -58,10 +69,12 @@ const Login = () => {
           setIsLoading(false);
         }
       } else {
-        setUserMsg("Something went wrong logging in");
+        setIsLoading(false);
+        setUserMsg("Something went wrong logging in!!");
       }
     } else {
       // show user message
+      setIsLoading(false);
       setUserMsg("Enter a valid email address");
     }
   };

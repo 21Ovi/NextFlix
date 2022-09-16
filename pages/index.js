@@ -1,7 +1,4 @@
-import { useState } from "react";
-
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
 import Banner from "../components/banner/banner";
@@ -9,7 +6,7 @@ import NavBar from "../components/nav/navbar";
 import SectionCards from "../components/card/section-cards";
 
 import { getPopularVideos, getVideos } from "../lib/videos";
-import { queryGraphQL } from "../lib/db/hasura";
+import { startFetchMyQuery } from "../lib/db/hasura";
 
 export async function getServerSideProps() {
   const disneyVideos = await getVideos("disney trailer");
@@ -29,6 +26,7 @@ export default function Home({
   TravelVideos,
   PopularVideos,
 }) {
+  startFetchMyQuery();
   return (
     <div className={styles.container}>
       <Head>
