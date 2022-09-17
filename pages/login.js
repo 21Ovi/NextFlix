@@ -39,38 +39,33 @@ const Login = () => {
     setIsLoading(true);
 
     if (email) {
-      if (email) {
-        //  log in a user by their email
-        try {
-          const didToken = await magic.auth.loginWithMagicLink({
-            email,
+      //  log in a user by their email
+      try {
+        const didToken = await magic.auth.loginWithMagicLink({
+          email,
+        });
+        console.log({ didToken });
+        if (didToken) {
+          const response = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${didToken}`,
+              "Content-Type": "application/json",
+            },
           });
-          console.log({ didToken });
-          if (didToken) {
-            const response = await fetch("/api/login", {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${didToken}`,
-                "Content-Type": "application/json",
-              },
-            });
 
-            const loggedInResponse = await response.json();
-            if (loggedInResponse.done) {
-              router.push("/");
-            } else {
-              setIsLoading(false);
-              setUserMsg("Something went wrong logging you in");
-            }
+          const loggedInResponse = await response.json();
+          if (loggedInResponse.done) {
+            router.push("/");
+          } else {
+            setIsLoading(false);
+            setUserMsg("Something went wrong logging you in");
           }
-        } catch (error) {
-          // Handle errors if required!
-          console.error("Something went wrong logging in", error);
-          setIsLoading(false);
         }
-      } else {
+      } catch (error) {
+        // Handle errors if required!
+        console.error("Something went wrong logging in", error);
         setIsLoading(false);
-        setUserMsg("Something went wrong logging in!!");
       }
     } else {
       // show user message
