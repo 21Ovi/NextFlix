@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unknown-property */
+import { useState } from "react";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
 import styles from "../../styles/Video.module.css";
@@ -44,6 +45,19 @@ const Video = ({ video }) => {
     statistics: { viewCount } = { viewCount: 0 },
   } = video;
 
+  const [toggleLike, setToggleLike] = useState(false);
+  const [toggleDislike, setToggleDislike] = useState(false);
+
+  const handleToggleDislike = () => {
+    setToggleDislike(!toggleDislike);
+    setToggleLike(toggleDislike);
+  };
+
+  const handleToggleLike = () => {
+    setToggleLike(!toggleLike);
+    setToggleDislike(toggleLike);
+  };
+
   const router = useRouter();
   return (
     <div className={styles.container}>
@@ -68,16 +82,19 @@ const Video = ({ video }) => {
             frameborder="0"
           ></iframe>
           <div className={styles.likeDislikeBtnWrapper}>
-            <div className={styles.btnWrapper}>
-              <button>
-                <Like />
+            <div className={styles.likeBtnWrapper}>
+              <button onClick={handleToggleLike}>
+                <div className={styles.btnWrapper}>
+                  <Like selected={toggleLike} />
+                </div>
               </button>
             </div>
-            <div className={styles.btnWrapper}>
-              <button>
-                <DisLike />
-              </button>
-            </div>
+
+            <button onClick={handleToggleDislike}>
+              <div className={styles.btnWrapper}>
+                <DisLike selected={toggleDislike} />
+              </div>
+            </button>
           </div>
           <div className={styles.modalBody}>
             <div className={styles.modalBodyContent}>
