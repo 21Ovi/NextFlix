@@ -8,6 +8,9 @@ import clsx from "classnames";
 import { getYoutubeVideoById } from "../../lib/videos";
 import NavBar from "../../components/nav/navbar";
 
+import Like from "../../components/icons/like-icon";
+import DisLike from "../../components/icons/dislike-icon";
+
 Modal.setAppElement("#__next");
 
 export async function getStaticProps(context) {
@@ -64,6 +67,18 @@ const Video = ({ video }) => {
             src={`https://www.youtube.com/embed/${router.query.videoId}?autoplay=0&origin=http://example.com&controls=0&rel=0`}
             frameborder="0"
           ></iframe>
+          <div className={styles.likeDislikeBtnWrapper}>
+            <div className={styles.btnWrapper}>
+              <button>
+                <Like />
+              </button>
+            </div>
+            <div className={styles.btnWrapper}>
+              <button>
+                <DisLike />
+              </button>
+            </div>
+          </div>
           <div className={styles.modalBody}>
             <div className={styles.modalBodyContent}>
               <div className={styles.col1}>
