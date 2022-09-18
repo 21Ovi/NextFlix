@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 
-import { findVideoIdByUser, updateStats } from "../../lib/db/hasura";
+import {
+  findVideoIdByUser,
+  insertStats,
+  updateStats,
+} from "../../lib/db/hasura";
 
 export default async function stats(req, resp) {
   if (req.method === "POST") {
@@ -16,14 +20,20 @@ export default async function stats(req, resp) {
 
         if (doesStatsExist) {
           const response = await updateStats(token, {
+            watched: true,
             userId,
-            watched: false,
-            videoId: "4zH5iYM4wJo",
+            videoId: "D7eFpRf4tac",
             favourited: 0,
           });
           resp.send({ msg: "It works!", response });
         } else {
-          resp.send({ msg: "It works!", decodedToken, doesStatsExist });
+          const response = await insertStats(token, {
+            watched: false,
+            userId,
+            videoId: "D7eFpRf4tac",
+            favourited: 0,
+          });
+          resp.send({ msg: "It works!", response });
         }
       }
     } catch (error) {
