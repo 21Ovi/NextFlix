@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
@@ -10,21 +11,10 @@ import {
   getVideos,
   getWatchItAgainVideos,
 } from "../lib/videos";
-import { verifyToken } from "../lib/utils";
+import useRedirectUser from "../utils/redirectUser";
 
 export async function getServerSideProps(context) {
-  const token = context.req ? context.req.cookies.token : null;
-  const userId = await verifyToken(token);
-
-  if (!userId) {
-    return {
-      props: {},
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
+  const { userId, token } = await useRedirectUser(context);
 
   const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
   const disneyVideos = await getVideos("disney trailer");
