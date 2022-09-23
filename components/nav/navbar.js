@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 
-import styles from "./navbar.module.css";
-
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Link from "next/link";
+
 import { magic } from "../../lib/magic-client";
+
+import styles from "./navbar.module.css";
 
 const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [username, setUsername] = useState("");
+  const [didToken, setDidToken] = useState("");
 
   const router = useRouter();
 
@@ -46,9 +49,19 @@ const NavBar = () => {
   const handleSignout = async (e) => {
     e.preventDefault();
     try {
-      await magic.user.logout();
-      console.log(await magic.user.isLoggedIn());
-      router.push("/login");
+      // await magic.user.logout();
+      // console.log(await magic.user.isLoggedIn());
+      // router.push("/login");
+
+      const response = await fetch("/api/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${didToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const res = await response.json();
     } catch (error) {
       console.log("Error logging out:", error);
       router.push("/login");
@@ -58,16 +71,18 @@ const NavBar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
-        <a className={styles.logoLink}>
-          <div className={styles.logoWrapper}>
-            <Image
-              src={"/static/icons/netflix.svg"}
-              alt="Netflix Logo"
-              width="128px"
-              height="35px"
-            />
-          </div>
-        </a>
+        <Link className={styles.logoutLink} href="/">
+          <a className={styles.logoLink}>
+            <div className={styles.logoWrapper}>
+              <Image
+                src={"/static/icons/netflix.svg"}
+                alt="Netflix Logo"
+                width="128px"
+                height="35px"
+              />
+            </div>
+          </a>
+        </Link>
         <ul className={styles.navItems}>
           <li className={styles.navItem} onClick={handleOnClickHome}>
             Home
