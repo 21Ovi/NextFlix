@@ -29,7 +29,8 @@ export async function getServerSideProps(context) {
   const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
   const disneyVideos = await getVideos("disney trailer");
   const ProductivityVideos = await getVideos("Shade Zahrai");
-  const TravelVideos = await getVideos("World Tour");
+  const cartoonVideos = await getVideos("Spongebob squarepants");
+  const fireship = await getVideos("fireship in 100 seconds");
 
   const PopularVideos = await getPopularVideos();
 
@@ -37,9 +38,10 @@ export async function getServerSideProps(context) {
     props: {
       disneyVideos,
       ProductivityVideos,
-      TravelVideos,
+      cartoonVideos,
       PopularVideos,
       watchItAgainVideos,
+      fireship,
     },
   };
 }
@@ -47,8 +49,9 @@ export async function getServerSideProps(context) {
 export default function Home({
   disneyVideos,
   ProductivityVideos,
-  TravelVideos,
+  cartoonVideos,
   PopularVideos,
+  fireship,
   watchItAgainVideos = [],
 }) {
   return (
@@ -79,7 +82,13 @@ export default function Home({
             videos={ProductivityVideos}
             size="medium"
           />
-          <SectionCards title={"Popular"} videos={PopularVideos} size="small" />
+          <SectionCards
+            title={"Spongebob"}
+            videos={cartoonVideos}
+            size="medium"
+          />
+
+          <SectionCards title={"Knowledge"} videos={fireship} size="small" />
         </div>
       </div>
     </div>
