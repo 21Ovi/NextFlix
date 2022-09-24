@@ -1,11 +1,59 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
 import Banner from "../components/banner/banner";
 import NavBar from "../components/nav/navbar";
+import SectionCards from "../components/card/section-cards";
 
-export default function Home() {
+import {
+  getPopularVideos,
+  getVideos,
+  getWatchItAgainVideos,
+} from "../lib/videos";
+import useRedirectUser from "../utils/redirectUser";
+
+export async function getServerSideProps(context) {
+  const { userId, token } = await useRedirectUser(context);
+
+  if (!userId) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
+  const disneyVideos = await getVideos("disney trailer");
+  const ProductivityVideos = await getVideos("Shade Zahrai");
+  const cartoonVideos = await getVideos("Spongebob squarepants");
+  const fireship = await getVideos("fireship in 100 seconds");
+
+  const PopularVideos = await getPopularVideos();
+
+  return {
+    props: {
+      disneyVideos,
+      ProductivityVideos,
+      cartoonVideos,
+      PopularVideos,
+      watchItAgainVideos,
+      fireship,
+    },
+  };
+}
+
+export default function Home({
+  disneyVideos,
+  ProductivityVideos,
+  cartoonVideos,
+  PopularVideos,
+  fireship,
+  watchItAgainVideos = [],
+}) {
   return (
     <div className={styles.container}>
       <Head>
@@ -14,16 +62,35 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <NavBar username="Ovesh@ov.com" />
-      <Banner
-        title="Clifford the red dog"
-        subTitle="a very cute dog"
-        imgUrl="/static/clifford.webp"
-      />
-      {/* 
-     
+      <div className={styles.main}>
+        <NavBar username="Ovesh@ov.com" />
+        <Banner
+          videoId="4zH5iYM4wJo"
+          title="Clifford the red dog"
+          subTitle="a very cute dog"
+          imgUrl="/static/clifford.webp"
+        />
+        <div className={styles.sectionWrapper}>
+          <SectionCards title={"Disney"} videos={disneyVideos} size="large" />
+          <SectionCards
+            title={"Watch It Again"}
+            videos={watchItAgainVideos}
+            size="small"
+          />
+          <SectionCards
+            title={"Productivity"}
+            videos={ProductivityVideos}
+            size="medium"
+          />
+          <SectionCards
+            title={"Spongebob"}
+            videos={cartoonVideos}
+            size="medium"
+          />
 
-      <Card /> */}
+          <SectionCards title={"Knowledge"} videos={fireship} size="small" />
+        </div>
+      </div>
     </div>
   );
 }
