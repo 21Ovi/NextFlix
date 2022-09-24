@@ -27,29 +27,21 @@ export async function getServerSideProps(context) {
   }
 
   const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
-  const MarvelTrailer = await getVideos("disney trailer");
-  const disneyVideos = await getVideos("marvel trailer");
-  const oswald = await getVideos("oswald episodes");
+  const disneyVideos = await getVideos("disney trailer");
   const ProductivityVideos = await getVideos("Shade Zahrai");
-  const cartoonVideos = await getVideos("spongebob squarepants full episodes");
-  const dragonTales = await getVideos("dragon tales full episodes in hindi ");
+  const cartoonVideos = await getVideos("Spongebob squarepants");
   const fireship = await getVideos("fireship in 100 seconds");
-  const looneyTunes = await getVideos("looney tunes in hindi");
 
   const PopularVideos = await getPopularVideos();
 
   return {
     props: {
       disneyVideos,
-      oswald,
       ProductivityVideos,
       cartoonVideos,
       PopularVideos,
       watchItAgainVideos,
       fireship,
-      dragonTales,
-      looneyTunes,
-      MarvelTrailer,
     },
   };
 }
@@ -58,12 +50,8 @@ export default function Home({
   disneyVideos,
   ProductivityVideos,
   cartoonVideos,
-  oswald,
   PopularVideos,
   fireship,
-  dragonTales,
-  looneyTunes,
-  MarvelTrailer,
   watchItAgainVideos = [],
 }) {
   return (
@@ -84,7 +72,6 @@ export default function Home({
         />
         <div className={styles.sectionWrapper}>
           <SectionCards title={"Disney"} videos={disneyVideos} size="large" />
-          <SectionCards title={"Marvel"} videos={MarvelTrailer} size="large" />
           <SectionCards
             title={"Watch It Again"}
             videos={watchItAgainVideos}
@@ -98,20 +85,6 @@ export default function Home({
           <SectionCards
             title={"Spongebob"}
             videos={cartoonVideos}
-            size="medium"
-          />
-
-          <SectionCards title={"Oswald"} videos={oswald} size="large" />
-
-          <SectionCards
-            title={"looney tunes"}
-            videos={looneyTunes}
-            size="large"
-          />
-
-          <SectionCards
-            title={"dragonTales"}
-            videos={dragonTales}
             size="medium"
           />
 
